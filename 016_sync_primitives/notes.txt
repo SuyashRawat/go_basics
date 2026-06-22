@@ -1,0 +1,146 @@
+SYNC PRIMITIVES CHEATSHEET
+
+MUTEX
+
+var mu sync.Mutex
+
+mu.Lock()
+mu.Unlock()
+
+Purpose:
+
+* Protect shared state.
+
+---
+
+WHY NEEDED?
+
+counter++
+
+is:
+
+Read
+Modify
+Write
+
+Not atomic.
+
+---
+
+COMMON BUG
+
+mu.Lock()
+
+return
+
+Forgot Unlock()
+
+Result:
+Deadlock
+
+Use:
+
+defer mu.Unlock()
+
+---
+
+RWMUTEX
+
+var mu sync.RWMutex
+
+Reader:
+mu.RLock()
+mu.RUnlock()
+
+Writer:
+mu.Lock()
+mu.Unlock()
+
+---
+
+WHEN TO USE RWMUTEX?
+
+When:
+
+Reads >> Writes
+
+Examples:
+
+* Cache
+* Config
+* Lookup tables
+
+---
+
+ATOMIC
+
+atomic.AddInt64()
+
+atomic.LoadInt64()
+
+atomic.StoreInt64()
+
+---
+
+ATOMIC VS MUTEX
+
+Atomic:
+
+* Faster
+* Limited operations
+
+Mutex:
+
+* Flexible
+* Complex state
+
+---
+
+SYNC.ONCE
+
+once.Do(func() {})
+
+Guarantees execution exactly once.
+
+---
+
+WAITGROUP
+
+wg.Add()
+
+wg.Done()
+
+wg.Wait()
+
+Used for waiting.
+
+Not for protecting data.
+
+Very common interview trap.
+
+---
+
+MUTEX VS CHANNEL
+
+Mutex:
+
+* Shared state
+
+Channel:
+
+* Communication
+
+---
+
+COMMON INTERVIEW QUESTIONS
+
+1. Why is counter++ unsafe?
+2. Mutex vs RWMutex?
+3. Mutex vs Atomic?
+4. Why use sync.Once?
+5. What causes deadlock?
+6. Is WaitGroup thread-safe?
+7. Can WaitGroup replace Mutex?
+8. When should RWMutex be avoided?
+9. What operations are atomic?
+10. How do you protect maps?
