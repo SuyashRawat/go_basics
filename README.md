@@ -83,24 +83,3 @@ Each topic contains:
 * Graceful Shutdown
 
 ---
-
-## Goal
-
-After completing this repository, I should be comfortable with:
-
-* Go SDE-1 Interviews
-* Backend Engineer Interviews
-* Machine Coding Rounds
-* Production Go Services
-* Concurrency Problems
-* System Design Discussions involving Go
-
----
-
-## References
-
-* Go Documentation
-* Effective Go
-* Go Blog
-* Go Source Code
-* Personal Notes & Interview Learnings
