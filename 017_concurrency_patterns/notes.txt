@@ -1,0 +1,66 @@
+CONCURRENCY PATTERNS CHEATSHEET
+
+WORKER POOL
+
+Producer
+   |
+Jobs Channel
+   |
+Workers
+
+Used when concurrency must be bounded.
+
+Examples:
+- API calls
+- DB operations
+- Queue processing
+
+--------------------------------------------------
+
+FAN-OUT
+
+One producer
+Many workers
+
+Goal:
+Increase throughput.
+
+--------------------------------------------------
+
+FAN-IN
+
+Many producers
+One result stream
+
+Goal:
+Aggregate results.
+
+--------------------------------------------------
+
+PIPELINE
+
+Stage1 -> Stage2 -> Stage3
+
+Each stage:
+- Receives input
+- Processes
+- Produces output
+
+--------------------------------------------------
+
+PIPELINE BENEFITS
+
+- Separation of concerns
+- Parallelism
+- Reusability
+
+--------------------------------------------------
+
+COMMON INTERVIEW QUESTIONS
+
+1. Worker Pool vs Fan-Out?
+2. Why not spawn one goroutine per task?
+3. What problem does a Worker Pool solve?
+4. What is a pipeline?
+5. How do you prevent pipeline leaks?
+6. How would you cancel a pipeline?
