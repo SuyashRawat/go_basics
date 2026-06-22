@@ -1,0 +1,178 @@
+GOROUTINES CHEATSHEET
+
+WHAT IS A GOROUTINE?
+
+* Lightweight thread managed by Go runtime.
+* Created using:
+
+go func() {}
+
+* Much cheaper than OS threads.
+
+---
+
+GOROUTINE VS THREAD
+
+Thread:
+
+* Managed by OS
+* Heavyweight
+* Expensive context switching
+* Large stack
+
+Goroutine:
+
+* Managed by Go runtime
+* Lightweight
+* Cheap context switching
+* Small initial stack
+* Stack grows automatically
+
+---
+
+G-M-P SCHEDULER
+
+G = Goroutine
+M = Machine (OS Thread)
+P = Processor (Scheduling Context)
+
+Execution Flow:
+
+G -> P -> M -> CPU
+
+Many goroutines can run on a small number of OS threads.
+
+---
+
+IMPORTANT PROPERTY
+
+Creating:
+
+for i := 0; i < 100000; i++ {
+go worker()
+}
+
+DOES NOT create 100000 OS threads.
+
+The runtime multiplexes goroutines over a small number of threads.
+
+---
+
+WAITGROUP
+
+Used to wait for goroutines.
+
+var wg sync.WaitGroup
+
+wg.Add(1)
+
+go func() {
+defer wg.Done()
+}()
+
+wg.Wait()
+
+---
+
+COMMON INTERVIEW TRAP
+
+func main() {
+go worker()
+}
+
+Program may exit before worker executes.
+
+Main goroutine exiting terminates the process.
+
+---
+
+CLOSURE CAPTURE BUG
+
+Wrong:
+
+for i := 0; i < 5; i++ {
+go func() {
+fmt.Println(i)
+}()
+}
+
+Correct:
+
+for i := 0; i < 5; i++ {
+go func(i int) {
+fmt.Println(i)
+}(i)
+}
+
+---
+
+RACE CONDITION
+
+counter++
+
+is NOT atomic.
+
+Actually:
+
+Read
+Modify
+Write
+
+Multiple goroutines can interleave.
+
+---
+
+RACE DETECTION
+
+go run -race main.go
+
+Always use during development.
+
+---
+
+GOROUTINE STATES
+
+Runnable
+Running
+Waiting
+Dead
+
+---
+
+GOROUTINE LEAK
+
+Occurs when a goroutine never exits.
+
+Example:
+
+go func() {
+<-ch
+}()
+
+If nobody sends to ch, goroutine waits forever.
+
+---
+
+PREVENTING LEAKS
+
+Use context cancellation.
+
+select {
+case <-ctx.Done():
+return
+}
+
+Every goroutine should have:
+
+1. Start condition
+2. Exit condition
+
+---
+
+runtime PACKAGE
+
+runtime.NumGoroutine()
+
+Useful for debugging leaks.
+
+---
