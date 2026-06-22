@@ -1,0 +1,174 @@
+CHANNELS CHEATSHEET
+
+WHAT IS A CHANNEL?
+* A communication mechanism between goroutines.
+* Typed conduit.
+
+Example:
+
+ch := make(chan int)
+
+---
+
+SEND
+ch <- 10
+---
+
+RECEIVE
+value := <-ch
+---
+
+UNBUFFERED CHANNEL
+
+ch := make(chan int)
+
+Properties:
+
+* Send blocks until receive.
+* Receive blocks until send.
+* Provides synchronization.
+
+---
+
+BUFFERED CHANNEL
+
+ch := make(chan int, 5)
+
+Properties:
+
+* Sender blocks only when buffer is full.
+* Receiver blocks when buffer is empty.
+
+---
+
+CHANNEL DIRECTION
+
+Receive Only:
+
+func worker(ch <-chan int)
+
+Send Only:
+
+func producer(ch chan<- int)
+
+Bidirectional:
+
+func foo(ch chan int)
+
+---
+
+CLOSED CHANNEL
+
+close(ch)
+
+Rules:
+* Sender closes.
+* Receiver never closes.
+
+Very common interview question.
+
+---
+
+READING FROM CLOSED CHANNEL
+
+v, ok := <-ch
+
+ok == false
+
+means channel is closed.
+
+---
+
+WRITING TO CLOSED CHANNEL
+
+panic
+
+Very common interview question.
+
+---
+
+RANGE OVER CHANNEL
+
+for val := range ch {
+}
+
+Stops automatically when channel closes.
+
+---
+
+SELECT
+
+Used to wait on multiple channel operations.
+
+select {
+case msg := <-ch:
+case <-ctx.Done():
+}
+
+---
+
+TIMEOUT PATTERN
+
+select {
+case result := <-ch:
+case <-time.After(time.Second):
+}
+
+---
+
+DEADLOCK
+
+Example:
+
+ch := make(chan int)
+
+ch <- 10
+
+No receiver exists.
+
+Runtime error:
+
+fatal error: all goroutines are asleep - deadlock!
+
+---
+
+WORKER POOL
+
+Producer -> Jobs Channel -> Workers
+
+Very common interview pattern.
+
+---
+
+CHANNELS VS MUTEX
+
+Channels:
+
+* Communication
+* Task distribution
+* Pipelines
+
+Mutex:
+
+* Protect shared state
+
+---
+
+COMMON INTERVIEW QUESTIONS
+
+1. Buffered vs unbuffered channel?
+2. Why are unbuffered channels synchronizing?
+3. Who should close a channel?
+4. What happens when reading from a closed channel?
+5. What happens when writing to a closed channel?
+6. What causes deadlock?
+7. Channels vs Mutex?
+8. What is select?
+9. Why use channel directions?
+10. Why is range useful on channels?
+
+
+Sender closes channel.
+Receiver never closes channel.
+
+jobs <-chan int represents a receive-only channel of integers.
