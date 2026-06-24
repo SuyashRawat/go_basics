@@ -1,0 +1,6 @@
+Stack vs Heap
+1. Quick ComparisonStack: Fast, local, private to one goroutine, cleaned instantly when a function returns.Heap: Slower, global, shared, cleaned by the Garbage Collector (GC).
+
+2. Go Stack CharacteristicsInitial Size: Starts tiny at 2KB per Goroutine (saves RAM).Dynamic: Grows and shrinks automatically at runtime as needed.No Overhead: Allocation is a simple CPU pointer adjustment.
+
+3. Go Heap CharacteristicsShared Storage: Holds data that outlives the function that created it.GC Cost: More heap allocations mean longer and more frequent GC pauses.Dynamic Sizes: Used when variable size is unknown at compile time.
